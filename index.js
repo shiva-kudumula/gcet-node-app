@@ -1,34 +1,50 @@
 import express from 'express'
+import mongoose from 'mongoose'
 import cors from 'cors'
 
-const app = express();
-app.listen(8080,()=>{
-  console.log("Server Started");
-});
+const app = express()
 
-app.use(cors());
+mongoose.connect("mongodb://localhost:27017/gcet")
+  .then(() => {
+    app.listen(8080, () => {
+      console.log("Server Started")
+    })
+  })
 
-app.get("/", (req, res)=>{
-  return res.send("Good Morning!!");
-});
+const userSchema = new mongoose.Schema({
+  name: { type: String }
+})
 
-app.get("/greet", (req, res)=>{
-  res.send("Greetings!!");
-} );
+const User = mongoose.model("User", userSchema)
 
-app.get("/name", (req, res)=>{
-  res.send("Peter");
-} );
+app.use(cors())
 
-app.get("/weather", (req, res)=>{
-  res.send("29 degrees");
-});
+app.get("/", (req, res) => {
+  res.send("Good Morning!!")
+})
 
-app.get("/products", (req, res)=>{
-  const products=[
-    {name: "Product1", price:45},
-    {name: "Product2", price:50},
-    {name: "Product3", price:60},
-  ];
-  res.json(products);
+app.get("/greet", (req, res) => {
+  res.send("Greetings!!")
+})
+
+app.get("/name", (req, res) => {
+  res.send("Shiva")
+})
+
+app.get("/register", async (req, res) => {
+  const result = await User.create({ name: "john" })
+  res.json(result)
+})
+
+app.get("/weather", (req, res) => {
+  res.send("29 degrees")
+})
+
+app.get("/products", (req, res) => {
+  const products = [
+    { name: "Product1", price: 45 },
+    { name: "Product2", price: 50 },
+    { name: "Product3", price: 60 }
+  ]
+  res.json(products)
 })
