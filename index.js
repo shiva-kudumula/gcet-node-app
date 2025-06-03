@@ -1,14 +1,34 @@
-import express from 'express';
+import express from 'express'
+import cors from 'cors'
 
 const app = express();
-
-// 👇 This route handles requests to http://localhost:8080/
-app.get('/', (req, res) => {
-  res.send('Welcome to GCET Node App!');
+app.listen(8080,()=>{
+  console.log("Server Started");
 });
 
-app.listen(3000, () => {
-  console.log('Server Started');
+app.use(cors());
+
+app.get("/", (req, res)=>{
+  return res.send("Good Morning!!");
 });
-app.get("/name",(req, res)=>{res.send('shiva')});
-app.get("/weather",(req, res)=>{res.send('33 degrees')});
+
+app.get("/greet", (req, res)=>{
+  res.send("Greetings!!");
+} );
+
+app.get("/name", (req, res)=>{
+  res.send("Peter");
+} );
+
+app.get("/weather", (req, res)=>{
+  res.send("29 degrees");
+});
+
+app.get("/products", (req, res)=>{
+  const products=[
+    {name: "Product1", price:45},
+    {name: "Product2", price:50},
+    {name: "Product3", price:60},
+  ];
+  res.json(products);
+})
